@@ -1,0 +1,55 @@
+[project]
+name = "high-order-new"
+version = "0.1.0"
+description = "High-order equivariant graph neural networks for scalar and tensor properties of crystalline materials."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "ase==3.26.0",
+    "e3nn==0.5.6",
+    "matplotlib==3.10.0",
+    "numpy==1.26.4",
+    "pymatgen>=2025.10.7,<2027",
+    "scipy>=1.13,<1.18",
+    "tensorboard>=2.20.0",
+    "torch==2.11.0",
+    "pyg-lib==0.6.0+pt211; sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "pyg-lib==0.6.0+pt211cpu; sys_platform == 'linux' or sys_platform == 'win32'",
+    "torch-cluster==1.6.3",
+    "torch-geometric==2.7.0",
+    "torch-scatter==2.1.2",
+    "torch-sparse==0.6.18",
+    "tqdm>=4.66.3",
+]
+
+[project.scripts]
+e3crys = "main:cli"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.uv]
+find-links = [
+    "https://data.pyg.org/whl/torch-2.11.0+cpu.html",
+]
+
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["main"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "data*"]
+
+[tool.setuptools.package-data]
+src = ["model/*.pt"]
+data = ["*.json", "dataloaders/*.json"]

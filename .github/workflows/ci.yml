@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CI_IMAGE: ghcr.io/deeptb-lab/e3crys/ci:py3.12-cpu
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull or build CI image
+        run: docker pull "$CI_IMAGE" || docker build -f Dockerfile.ci -t "$CI_IMAGE" .
+
+      - name: Run CLI check and tests
+        run: |
+          docker run --rm \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            -e UV_PROJECT_ENVIRONMENT=/opt/e3crys/.venv \
+            -e UV_LINK_MODE=copy \
+            "$CI_IMAGE" \
+            bash -lc "uv sync --locked && uv run e3crys --help && uv run pytest"
