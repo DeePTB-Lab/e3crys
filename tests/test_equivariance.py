@@ -1,30 +1,18 @@
-import os
-import sys
 from argparse import Namespace
-from pathlib import Path
-
-import warnings
-
-warnings.filterwarnings("ignore")
 
 import torch
 import torch.nn as nn
 from e3nn.o3 import Irreps, rand_matrix
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-from src.model import (  # noqa: E402
+from src.model import (
     EmbeddingLayer,
     EquivariantLayer,
     FinalMLP,
-    InvariantLayer,
     MiddleMLP,
     Model,
     ReadoutLayer,
 )
-from src.model.gmtnet import HighOrderGMTNet  # noqa: E402
+from src.model.gmtnet import HighOrderGMTNet
 
 
 def _rotate_cartesian_tensor(tensor: torch.Tensor, rotation: torch.Tensor) -> torch.Tensor:
@@ -248,17 +236,3 @@ def test_gmtnet_dielectric_tensor_equivariance():
 
     _assert_close("GMTNet dielectric tensor model", _rotate_cartesian_tensor(output, rotation), rotated_output, atol=5e-4, rtol=5e-4)
 
-
-def run_all_tests():
-    test_equivariant_layer_current_interface()
-    test_readout_layer_current_interface()
-    test_high_order_model_force_equivariance()
-    test_gmtnet_force_equivariance()
-    test_gmtnet_scalar_invariance()
-    test_gmtnet_dielectric_tensor_equivariance()
-
-
-if __name__ == "__main__":
-    os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
-    run_all_tests()
-    print("Equivariance tests passed for high_order and GMTNet models.")

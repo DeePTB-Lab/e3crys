@@ -1,5 +1,5 @@
 [project]
-name = "high-order-new"
+name = "e3crys"
 version = "0.1.0"
 description = "High-order equivariant graph neural networks for scalar and tensor properties of crystalline materials."
 readme = "README.md"

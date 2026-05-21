@@ -12,7 +12,7 @@ CI.
 - PyG `2.7.0`
 - PyG extension wheels from
   `https://data.pyg.org/whl/torch-2.11.0+cpu.html`
-- Command-line entry point: `e3crys`
+- Python distribution name and command-line entry point: `e3crys`
 
 Create the environment with:
 
@@ -77,10 +77,3 @@ packages together:
 
 Do not mix PyTorch and PyG extension builds from different Torch or CUDA
 targets.
-
-## Packaging Note
-
-The CLI command is `e3crys`. During the repository migration, the Python
-distribution name in `pyproject.toml` remains `high-order-new`; rename it in a
-separate packaging change so the lock file, documentation, and CI can be
-reviewed together.

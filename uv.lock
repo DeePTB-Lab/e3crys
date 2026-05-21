@@ -429,6 +429,62 @@ wheels = [
 ]
 
 [[package]]
+name = "e3crys"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "ase" },
+    { name = "e3nn" },
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pyg-lib", version = "0.6.0+pt211", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
+    { name = "pyg-lib", version = "0.6.0+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "pymatgen" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "scipy", version = "1.17.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "tensorboard" },
+    { name = "torch" },
+    { name = "torch-cluster", version = "1.6.3", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'darwin'" },
+    { name = "torch-cluster", version = "1.6.3+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "torch-geometric" },
+    { name = "torch-scatter", version = "2.1.2", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'darwin'" },
+    { name = "torch-scatter", version = "2.1.2+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "torch-sparse", version = "0.6.18", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'darwin'" },
+    { name = "torch-sparse", version = "0.6.18+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { name = "tqdm" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "ase", specifier = "==3.26.0" },
+    { name = "e3nn", specifier = "==0.5.6" },
+    { name = "matplotlib", specifier = "==3.10.0" },
+    { name = "numpy", specifier = "==1.26.4" },
+    { name = "pyg-lib", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'", specifier = "==0.6.0+pt211" },
+    { name = "pyg-lib", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==0.6.0+pt211cpu" },
+    { name = "pymatgen", specifier = ">=2025.10.7,<2027" },
+    { name = "scipy", specifier = ">=1.13,<1.18" },
+    { name = "tensorboard", specifier = ">=2.20.0" },
+    { name = "torch", specifier = "==2.11.0" },
+    { name = "torch-cluster", marker = "sys_platform == 'darwin'", specifier = "==1.6.3" },
+    { name = "torch-cluster", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==1.6.3+pt211cpu" },
+    { name = "torch-geometric", specifier = "==2.7.0" },
+    { name = "torch-scatter", marker = "sys_platform == 'darwin'", specifier = "==2.1.2" },
+    { name = "torch-scatter", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==2.1.2+pt211cpu" },
+    { name = "torch-sparse", marker = "sys_platform == 'darwin'", specifier = "==0.6.18" },
+    { name = "torch-sparse", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==0.6.18+pt211cpu" },
+    { name = "tqdm", specifier = ">=4.66.3" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.0.0" }]
+
+[[package]]
 name = "e3nn"
 version = "0.5.6"
 source = { registry = "https://pypi.org/simple" }
@@ -604,62 +660,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/14/e4/9990b41c6d7a44e1e9dee8ac11d7a9802ba1378b40d77468a7761d1ad288/grpcio-1.80.0-cp312-cp312-win32.whl", hash = "sha256:c71309cfce2f22be26aa4a847357c502db6c621f1a49825ae98aa0907595b193", size = 4140904, upload-time = "2026-03-30T08:47:35.319Z" },
     { url = "https://files.pythonhosted.org/packages/2f/2c/296f6138caca1f4b92a31ace4ae1b87dab692fc16a7a3417af3bb3c805bf/grpcio-1.80.0-cp312-cp312-win_amd64.whl", hash = "sha256:9fe648599c0e37594c4809d81a9e77bd138cc82eb8baa71b6a86af65426723ff", size = 4880944, upload-time = "2026-03-30T08:47:37.831Z" },
 ]
-
-[[package]]
-name = "high-order-new"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "ase" },
-    { name = "e3nn" },
-    { name = "matplotlib" },
-    { name = "numpy" },
-    { name = "pyg-lib", version = "0.6.0+pt211", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
-    { name = "pyg-lib", version = "0.6.0+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-    { name = "pymatgen" },
-    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "scipy", version = "1.17.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "tensorboard" },
-    { name = "torch" },
-    { name = "torch-cluster", version = "1.6.3", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'darwin'" },
-    { name = "torch-cluster", version = "1.6.3+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-    { name = "torch-geometric" },
-    { name = "torch-scatter", version = "2.1.2", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'darwin'" },
-    { name = "torch-scatter", version = "2.1.2+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-    { name = "torch-sparse", version = "0.6.18", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'darwin'" },
-    { name = "torch-sparse", version = "0.6.18+pt211cpu", source = { registry = "https://data.pyg.org/whl/torch-2.11.0+cpu.html" }, marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-    { name = "tqdm" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "ase", specifier = "==3.26.0" },
-    { name = "e3nn", specifier = "==0.5.6" },
-    { name = "matplotlib", specifier = "==3.10.0" },
-    { name = "numpy", specifier = "==1.26.4" },
-    { name = "pyg-lib", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'", specifier = "==0.6.0+pt211" },
-    { name = "pyg-lib", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==0.6.0+pt211cpu" },
-    { name = "pymatgen", specifier = ">=2025.10.7,<2027" },
-    { name = "scipy", specifier = ">=1.13,<1.18" },
-    { name = "tensorboard", specifier = ">=2.20.0" },
-    { name = "torch", specifier = "==2.11.0" },
-    { name = "torch-cluster", marker = "sys_platform == 'darwin'", specifier = "==1.6.3" },
-    { name = "torch-cluster", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==1.6.3+pt211cpu" },
-    { name = "torch-geometric", specifier = "==2.7.0" },
-    { name = "torch-scatter", marker = "sys_platform == 'darwin'", specifier = "==2.1.2" },
-    { name = "torch-scatter", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==2.1.2+pt211cpu" },
-    { name = "torch-sparse", marker = "sys_platform == 'darwin'", specifier = "==0.6.18" },
-    { name = "torch-sparse", marker = "sys_platform == 'linux' or sys_platform == 'win32'", specifier = "==0.6.18+pt211cpu" },
-    { name = "tqdm", specifier = ">=4.66.3" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.0.0" }]
 
 [[package]]
 name = "idna"

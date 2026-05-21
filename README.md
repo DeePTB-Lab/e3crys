@@ -7,12 +7,8 @@ prediction.
 
 The main modeling path combines atom and distance embeddings, invariant message
 passing, equivariant tensor-product updates, and readout layers for scalar or
-tensor outputs.
-
-This repository is being prepared as the DeePTB-Lab organization version of the
-project. The command-line entry point is `e3crys`. The Python distribution name
-is still `high-order-new` during this migration and should be renamed in a
-separate packaging change.
+tensor outputs. The command-line entry point and Python distribution name are
+both `e3crys`.
 
 ## Repository Layout
 
@@ -23,7 +19,8 @@ separate packaging change.
   visualization helpers.
 - `data/`: dataset definitions, dataloaders, property lists, processed JARVIS
   tensor datasets, and exploration notebooks.
-- `tests/`: maintained smoke tests for the currently supported model path.
+- `tests/`: maintained smoke and equivariance tests for the currently
+  supported model paths.
 
 Required model constants are tracked in Git:
 
@@ -84,7 +81,7 @@ committed.
 
 ## Tests and CI
 
-Run the maintained smoke tests:
+Run the maintained test suite:
 
 ```bash
 uv run pytest
