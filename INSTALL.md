@@ -1,20 +1,18 @@
 # Installation
 
-This project uses `uv` for reproducible dependency resolution.
+This project uses `uv` for reproducible dependency resolution. The checked-in
+`pyproject.toml` describes the supported Python package environment, and
+`uv.lock` records the exact resolved dependencies used by local development and
+CI.
 
-## CPU environment
+## Supported Baseline
 
-The checked-in `pyproject.toml` and `uv.lock` mirror the existing
-`requirements.txt` CPU stack, using the same PyG installation pattern as
-DeePTB:
-
+- Python `>=3.10,<3.13`
 - PyTorch `2.11.0`
 - PyG `2.7.0`
-- `torch-scatter==2.1.2`
-- `torch-cluster==1.6.3`
-- `torch-sparse==0.6.18`
-- `pyg-lib==0.6.0`
-- PyG CPU wheels from `https://data.pyg.org/whl/torch-2.11.0+cpu.html`
+- PyG extension wheels from
+  `https://data.pyg.org/whl/torch-2.11.0+cpu.html`
+- Command-line entry point: `e3crys`
 
 Create the environment with:
 
@@ -22,25 +20,52 @@ Create the environment with:
 uv sync --locked
 ```
 
-Run the main entry point with:
+Check the CLI:
 
 ```bash
 uv run e3crys --help
 ```
 
-## PyG compatibility note
+Run tests:
 
-PyG compiled extensions must match the PyTorch build and platform. This
-project provides PyG's CPU wheel page through `tool.uv.find-links` and uses
-platform markers for PyG extension packages. macOS wheels use versions such as
-`torch-scatter==2.1.2`, while Linux/Windows CPU wheels use local-version
-variants such as `torch-scatter==2.1.2+pt211cpu`.
+```bash
+uv run pytest
+```
 
-Keeping these variants explicit makes the lock file usable both on local macOS
-development machines and in the Linux CI image.
+## PyG Platform Notes
 
-For CUDA training, create a separate lock/configuration that aligns all of
-these versions together:
+PyG compiled extensions must match the PyTorch build and platform. The project
+uses `tool.uv.find-links` to point `uv` at the PyG wheel page and uses explicit
+platform markers for compiled PyG packages:
+
+- macOS uses versions such as `torch-scatter==2.1.2`
+- Linux and Windows use CPU local-version variants such as
+  `torch-scatter==2.1.2+pt211cpu`
+
+The same pattern is used for `torch-cluster`, `torch-sparse`, and `pyg-lib`.
+Keeping these variants explicit prevents a lock file generated on macOS from
+forcing Linux CI or Linux users onto macOS-only wheels.
+
+## CI Image
+
+GitHub Actions builds and publishes:
+
+```text
+ghcr.io/deeptb-lab/e3crys/ci:py3.12-cpu
+```
+
+The image pre-installs the locked project dependency environment under
+`/opt/e3crys/.venv`. CI then mounts the repository at `/workspace`, runs
+`uv sync --locked`, checks `uv run e3crys --help`, and runs `uv run pytest`.
+
+The tag name reflects the intended CPU PyG extension stack. It is not currently
+an aggressively minimized runtime image, and Linux PyTorch wheels may include
+additional runtime packages from PyTorch's own distribution.
+
+## CUDA Guidance
+
+CUDA training should use a separate lock/configuration that aligns all compiled
+packages together:
 
 - CUDA runtime version
 - PyTorch build
@@ -50,4 +75,12 @@ these versions together:
 - `torch-sparse`
 - `pyg-lib`
 
-Do not mix PyTorch and PyG extension builds from different Torch/CUDA targets.
+Do not mix PyTorch and PyG extension builds from different Torch or CUDA
+targets.
+
+## Packaging Note
+
+The CLI command is `e3crys`. During the repository migration, the Python
+distribution name in `pyproject.toml` remains `high-order-new`; rename it in a
+separate packaging change so the lock file, documentation, and CI can be
+reviewed together.

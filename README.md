@@ -1,42 +1,59 @@
-# High Order
+# e3crys
 
-High Order is a research codebase for high-order invariant and equivariant graph
-neural networks on crystalline materials. It supports self-supervised training,
-scalar property prediction, and tensor property prediction.
+`e3crys` is a research codebase for invariant and equivariant graph neural
+networks on crystalline materials. The project supports self-supervised
+pretraining, scalar property prediction, and Voigt-form tensor property
+prediction.
 
 The main modeling path combines atom and distance embeddings, invariant message
 passing, equivariant tensor-product updates, and readout layers for scalar or
-Voigt-form tensor outputs.
+tensor outputs.
+
+This repository is being prepared as the DeePTB-Lab organization version of the
+project. The command-line entry point is `e3crys`. The Python distribution name
+is still `high-order-new` during this migration and should be renamed in a
+separate packaging change.
 
 ## Repository Layout
 
-- `main.py`: command-line entry point.
-- `src/model/`: embedding, invariant/equivariant layers, tensor products, MLPs,
-  readouts, and e3nn utilities.
-- `src/train_test/`: training, validation, testing, checkpointing, metrics, and
-  visualization.
-- `data/`: dataset definitions, dataloaders, property lists, and processed
-  tensor datasets.
-- `tests/`: current smoke tests for the maintained model path.
+- `main.py`: command-line entry point and training orchestration.
+- `src/model/`: embedding layers, invariant/equivariant layers, tensor
+  products, readouts, MLPs, GMTNet components, and e3nn utilities.
+- `src/train_test/`: training, validation, testing, checkpoint, metric, and
+  visualization helpers.
+- `data/`: dataset definitions, dataloaders, property lists, processed JARVIS
+  tensor datasets, and exploration notebooks.
+- `tests/`: maintained smoke tests for the currently supported model path.
 
-Required model constants are kept in:
+Required model constants are tracked in Git:
 
 - `src/model/Jd.pt`
 - `src/model/z_rot_indices_lmax12.pt`
 
 ## Installation
 
-This project uses `uv`.
+This project uses `uv` and a checked-in `uv.lock` for reproducible installs.
 
 ```bash
 uv sync --locked
 ```
 
-The lock file targets the CPU PyTorch/PyG stack:
+Then verify the command-line entry point:
+
+```bash
+uv run e3crys --help
+```
+
+The lock file targets Python `>=3.10,<3.13` and the current PyTorch/PyG stack:
 
 - PyTorch `2.11.0`
 - PyG `2.7.0`
-- PyG extension wheels from `https://data.pyg.org/whl/torch-2.11.0+cpu.html`
+- `pyg-lib`, `torch-cluster`, `torch-scatter`, and `torch-sparse` from the PyG
+  wheel index for `torch-2.11.0+cpu`
+
+PyG compiled extensions are platform-specific. The lock file includes macOS
+wheels such as `torch-scatter==2.1.2` and Linux/Windows CPU wheel variants such
+as `torch-scatter==2.1.2+pt211cpu`.
 
 See [INSTALL.md](INSTALL.md) for platform notes and CUDA guidance.
 
@@ -48,23 +65,24 @@ Show available options:
 uv run e3crys --help
 ```
 
-The historical entry point remains available:
+The historical script entry point remains available:
 
 ```bash
 uv run python main.py --help
 ```
 
-Run a tensor-only smoke-sized training invocation by limiting epochs yourself,
-for example:
+Run a tensor-only smoke-sized training invocation by limiting epochs and sample
+count yourself:
 
 ```bash
 uv run e3crys --no-need-self-train --no-need-scalar-train --tensor-train-limit 1 --tensor-num-epochs 1
 ```
 
 Full training writes checkpoints, metrics, TensorBoard logs, and figures to the
-configured output directories.
+configured output directories. Generated training outputs should not be
+committed.
 
-## Tests
+## Tests and CI
 
 Run the maintained smoke tests:
 
@@ -72,22 +90,34 @@ Run the maintained smoke tests:
 uv run pytest
 ```
 
-`pytest` is configured to collect tests only from `tests/`. Older scripts under
-`src/model/utils/` are not treated as the maintained test suite.
+GitHub Actions runs the same CLI check and test suite on Ubuntu. A separate
+workflow builds and publishes the dependency image:
 
-GitHub Actions runs the same CLI check and test suite on Ubuntu. The CI image
-workflow publishes `ghcr.io/deeptb-lab/e3crys/ci:py3.12-cpu` so repeated CI
-runs can reuse the locked CPU dependency stack instead of rebuilding the full
-environment from scratch.
+```text
+ghcr.io/deeptb-lab/e3crys/ci:py3.12-cpu
+```
 
-## Data
+The tag name reflects the intended CPU PyG extension stack. On Linux, upstream
+PyTorch wheels may still bring runtime packages published with the PyTorch wheel
+itself, so treat the image as the locked CI dependency image rather than a
+minimal CPU-only runtime image.
 
-The repository currently includes processed tensor datasets such as dielectric,
-elastic, and piezoelectric JARVIS-derived pickle files. Some paths in
-`data/dataloaders/name_path.json` point to external or local datasets that are
-not committed, such as Materials Project, Alexandria, and several scalar
-property raw datasets.
+The latest workflow status should be checked in GitHub Actions after changes to
+`pyproject.toml`, `uv.lock`, `Dockerfile.ci`, or workflow files.
 
-`pretrained/*.pth` is reserved for collaboration artifacts that help reproduce
-shared results. Other checkpoints, generated neighbor-list caches, training
-outputs, local databases, or temporary logs should stay out of Git.
+## Data and Artifacts
+
+The repository intentionally keeps:
+
+- `data/explore.ipynb`
+- processed JARVIS tensor datasets in `data/*.pkl`
+- `pretrained/self_train_epochs100_epoch100.pth` for collaboration and result
+  reproduction
+
+Some paths in `data/dataloaders/name_path.json` point to external or local
+datasets that are not committed, including Materials Project, Alexandria, and
+several raw scalar-property datasets.
+
+Do not commit generated neighbor-list caches, local databases, checkpoints
+outside the agreed `pretrained/` artifact, metrics, figures, TensorBoard logs,
+or temporary runtime files.
