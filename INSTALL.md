@@ -31,14 +31,13 @@ uv run e3crys --help
 ## PyG compatibility note
 
 PyG compiled extensions must match the PyTorch build and platform. This
-project follows DeePTB's approach for PyG extension packages: avoid hard-coding
-Linux/Windows local-version suffixes such as `+pt211cpu` for every platform,
-and provide PyG's CPU wheel page through `tool.uv.find-links`. That lets `uv`
-select platform-appropriate wheels for macOS, Linux, or Windows.
+project provides PyG's CPU wheel page through `tool.uv.find-links` and uses
+platform markers for PyG extension packages. macOS wheels use versions such as
+`torch-scatter==2.1.2`, while Linux/Windows CPU wheels use local-version
+variants such as `torch-scatter==2.1.2+pt211cpu`.
 
-`pyg-lib` is the exception: PyG publishes macOS arm64 wheels as `0.6.0+pt211`
-and Linux/Windows CPU wheels as `0.6.0+pt211cpu`, so `pyproject.toml` uses
-platform markers for that package.
+Keeping these variants explicit makes the lock file usable both on local macOS
+development machines and in the Linux CI image.
 
 For CUDA training, create a separate lock/configuration that aligns all of
 these versions together:
